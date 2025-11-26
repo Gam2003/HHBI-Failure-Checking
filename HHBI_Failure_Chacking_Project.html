@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSFiddle aqyzx06f</title>
+
+  <style>
+    /* ตั้งค่าตัวแปรสี */
+:root {
+    --page-bg: #f0f8ff;      /* พื้นหลังฟ้าอ่อน */
+    --text-main: #2c3e50;    /* สีตัวหนังสือ */
+    --table-header: #e9ecef; /* สีหัวตารางเทาอ่อน */
+    --table-border: #dee2e6;
+    --accent: #3498db;       /* สีปุ่มฟ้าสดใส */
+    --sn-bg: #ffffff;        /* พื้นหลังช่อง SN สีขาว */
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--page-bg);
+    color: var(--text-main);
+    padding: 40px 20px;
+    line-height: 1.6;
+}
+
+.container { max-width: 1100px; margin: 0 auto; }
+
+/* Header */
+.header-section { text-align: center; margin-bottom: 30px; }
+.header-section h1 { color: #34495e; font-weight: 700; margin-bottom: 5px; font-size: 2rem; }
+.header-section p { color: #7f8c8d; margin-top: 0; font-size: 1.1rem; font-weight: 300; }
+.disclaimer { color: #95a5a6; font-size: 0.85rem; margin-top: 5px; display: block; }
+
+/* Controls */
+.control-bar {
+    display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;
+    background: white; padding: 20px; border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); width: fit-content; margin: 0 auto 30px auto;
+}
+input[type="file"] { padding: 8px 15px; background: #f8f9fa; border: 1px solid #ced4da; border-radius: 20px; font-size: 0.9rem; color: #555; }
+.btn-soft {
+    background-color: var(--accent); color: white; border: none; padding: 10px 30px;
+    border-radius: 25px; font-family: 'Sarabun'; font-weight: 600; font-size: 1rem;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+}
+.btn-soft:hover { transform: translateY(-2px); background-color: #2980b9; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
+
+/* Map Grid Styles */
+.section-title { text-align: center; margin-bottom: 15px; }
+.legend { display: flex; justify-content: center; gap: 15px; margin-top: 5px; font-size: 0.9rem; color: #7f8c8d; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-normal { background: #e3f2fd; border: 1px solid #bbdefb; }
+.dot-error { background: #ff5252; border: 1px solid #d32f2f; }
+
+.map-wrapper { display: flex; justify-content: center; margin-bottom: 40px; }
+.grid-container {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px;
+    background: white; padding: 15px; border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 550px; position: relative;
+}
+
+.grid-cell, .wide-cell, .footer-left, .footer-right {
+    background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 4px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center;
+    justify-content: center; color: #90caf9; font-size: 0.8rem;
+}
+.grid-cell { height: 35px; }
+.wide-cell { grid-column: span 3; height: 80px; font-weight: bold; color: #1e88e5; }
+.footer-left { grid-column: span 1; height: 80px; font-weight: bold; color: #1565c0; }
+.footer-right { grid-column: span 11; height: 80px; font-weight: bold; color: #1565c0; font-size: 1.2rem; }
+
+.grid-cell:hover, .wide-cell:hover { transform: scale(1.1); z-index: 5; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+/* Error State (สีแดง) */
+.grid-cell.error { background: #ff5252; border-color: #d32f2f; color: white; animation: pulse 2s infinite; }
+.grid-cell.active { transform: scale(1.15); z-index: 10; border-color: #000; box-shadow: 0 0 15px rgba(0,0,0,0.2); }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(255, 82, 82, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); } }
+
+/* Tooltip */
+.love-tooltip {
+    position: absolute; background: #2c3e50; color: white; padding: 10px; border-radius: 8px;
+    font-size: 0.85rem; pointer-events: none; opacity: 0; transform: translateY(10px);
+    transition: 0.3s; z-index: 100; white-space: pre-line; text-align: left;
+    min-width: 150px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.love-tooltip.show { opacity: 1; transform: translateY(0); }
+.love-tooltip ul { margin: 0; padding-left: 15px; } .love-tooltip li { margin-bottom: 4px; }
+
+/* Recommendation Box */
+.rec-box {
+    display: none; background: #fff5f5; border-left: 5px solid #ff6b6b;
+    padding: 20px 25px; border-radius: 12px; margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: slideDown 0.5s ease;
+}
+.rec-title { margin-top: 0; color: #c0392b; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+.rec-list { padding-left: 20px; margin-bottom: 0; }
+.rec-list li { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(0,0,0,0.1); }
+
+/* Table */
+#tableContainer:empty { display: none; border: none; box-shadow: none; }
+.table-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid white; }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--table-header); color: #495057; padding: 18px; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; border-bottom: 2px solid #ced4da; }
+td { padding: 15px; border-bottom: 1px solid var(--table-border); text-align: center; font-size: 0.95rem; }
+th, td { border-left: none; border-right: none; }
+tr:hover td { background: #f1f8ff; }
+.sn-cell { background: var(--sn-bg); color: #2c3e50; font-weight: 700; border-right: 2px solid var(--table-header); }
+.val-high { color: #e74c3c; font-weight: 700; background: #fceaea; padding: 4px 10px; border-radius: 6px; }
+.val-low { color: #2980b9; font-weight: 700; background: #eaf2f8; padding: 4px 10px; border-radius: 6px; }
+.val-normal { color: #95a5a6; }
+
+.footer { text-align: center; margin-top: 50px; color: #bdc3c7; font-size: 0.85rem; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+
+  
+</head>
+<body>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="header-section">
+        <h1> HHBI Failure Checking</h1>
+        <small class="disclaimer">Currently supports analysis for 'AlvinXX_[XXX]_CHXX_readback' symptom.</small>
+    </div>
+
+    <div class="control-bar">
+        <input type="file" id="myFile" accept=".csv">
+        <button id="processBtn" class="btn-soft">
+            <i class="fa-solid fa-bolt"></i> Run Analysis
+        </button>
+    </div>
+
+    <div class="section-title">
+        <h3>
+        <div class="legend">
+            <span class="dot dot-normal"></span> Normal
+            <span class="dot dot-error"></span> Issue Found
+        </div>
+    </div>
+    
+    <div class="map-wrapper">
+        <div id="grid" class="grid-container"></div>
+        <div id="tooltip" class="love-tooltip"></div>
+    </div>
+
+    <div id="recommendationBox" class="rec-box">
+        <h3 class="rec-title"><i class="fa-solid fa-circle-exclamation"></i> System Recommendations</h3>
+        <ul id="recommendationList" class="rec-list"></ul>
+    </div>
+
+    <div id="tableContainer" class="table-card"></div>
+
+    
+</div>
+
+  <script>
+    // ============================
+// 1. Global State & Setup
+// ============================
+let alvinMapData = {}; 
+const gridContainer = document.getElementById('grid');
+const tooltip = document.getElementById('tooltip');
+let activeCell = null;
+
+// สร้าง Grid 96 ช่อง
+for (let i = 1; i <= 96; i++) {
+    let cell = document.createElement('div');
+    cell.classList.add('grid-cell');
+    cell.id = `cell-${i}`; 
+    cell.innerHTML = i;
+    cell.addEventListener('click', function(e) { e.stopPropagation(); showTooltip(cell, i); });
+    gridContainer.appendChild(cell);
+}
+// ช่องพิเศษ
+["A","B","C","D"].forEach(l => createExtraCell('wide-cell', l));
+createExtraCell('footer-left', "E");
+createExtraCell('footer-right', "F");
+
+function createExtraCell(cls, txt) {
+    let c = document.createElement('div'); c.className = cls; c.innerHTML = txt;
+    gridContainer.appendChild(c);
+}
+
+// ============================
+// 2. Processing Logic
+// ============================
+let fileInput = document.getElementById("myFile");
+let processBtn = document.getElementById("processBtn");
+
+processBtn.addEventListener("click", function() {
+    if (!fileInput.files || !fileInput.files[0]) { alert("⚠️ Please select a CSV file first"); return; }
+    
+    processBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+    processBtn.style.opacity = "0.7";
+    
+    setTimeout(() => { processFile(); }, 100);
+});
+
+function processFile() {
+    let reader = new FileReader();
+    reader.onload = function(e) {
+        alvinMapData = {};
+        for(let i=1; i<=96; i++) alvinMapData[i] = { status: 'ok', details: [] };
+        document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('error', 'active'));
+
+        let text = e.target.result;
+        let rows = text.split(/\r\n|\n/); 
+        let extractedData = [];
+
+        for (let i = 1; i < rows.length; i++) {
+            let row = rows[i]; if (row.trim() === "") continue;
+            let cols = parseCSVLine(row);
+            if (cols.length > 5) {
+                let loop = (cols[2].match(/Loop\s+(\d+)/) || [0,"0"])[1];
+                let sn = (cols[3].match(/SN=([^,"]+)/) || [0,"Unknown"])[1];
+                let alvin = (cols[4].match(/Alvin(\d+)/) || [0,"0"])[1];
+                let ch = (cols[4].match(/(CH\d+)/) || [0,"-"])[1];
+                let val = (cols[5].match(/value='([^']+)'/) || [0,"0"])[1];
+                let lower = (cols[5].match(/lower_limit='([^']+)'/) || [0,"0"])[1];
+                let upper = (cols[5].match(/upper_limit='([^']+)'/) || [0,"0"])[1];
+
+                extractedData.push({ Loop: loop, SN: sn, Label: cols[4], AlvinID: alvin, Channel: ch, Value: parseFloat(val), Lower: parseFloat(lower), Upper: parseFloat(upper) });
+            }
+        }
+        extractedData.sort((a, b) => a.SN.localeCompare(b.SN) || (parseInt(a.Loop) - parseInt(b.Loop)));
+
+        createTable(extractedData);
+        analyzeAllIssues(extractedData); 
+        
+        processBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> Run Analysis';
+        processBtn.style.opacity = "1";
+    };
+    reader.readAsText(fileInput.files[0]);
+}
+
+// ============================
+// 3. Analysis Logic (Priority System)
+// ============================
+function analyzeAllIssues(data) {
+    let stats = prepareStats(data);
+    let reports = new Set();
+    
+    let alvinFailCount = {}; 
+    // 🔥 Set เก็บรายชื่อ Alvin ที่เข้าข่าย MC (อาการหนัก)
+    let criticalAlvins = new Set();
+
+    const recordIssue = (idStr, msg, type) => {
+        let id = parseInt(idStr);
+        if (alvinMapData[id]) {
+            alvinMapData[id].status = 'error';
+            alvinMapData[id].details.push({ type: type, msg: msg });
+        }
+    };
+
+    // ------------------------------------------
+    // 1. Check MC (Priority #1)
+    // ------------------------------------------
+    let mcFailedGlobal = false;
+
+    for (let key in stats) {
+        let s = stats[key];
+        
+        // ตรวจสอบประวัติทุกบรรทัด: มีลูปไหนบ้างที่เข้าเงื่อนไข MC?
+        let mcLoops = new Set();
+
+        s.history.forEach(r => {
+            // เงื่อนไข: Limit 0-1 และ ค่า > 190
+            let isMCLimit = (r.lower === 0 && r.upper === 1);
+            let isCriticalVal = (r.val > 190);
+
+            if (isMCLimit && isCriticalVal) {
+                mcLoops.add(r.loop); // จดว่าลูปนี้พังแบบ MC
+            }
+        });
+
+        // ถ้าเจอครบ 4 ลูป (0, 1, 2, 3) -> ถือว่าเป็น IssueMC
+        if (mcLoops.has("0") && mcLoops.has("1") && mcLoops.has("2") && mcLoops.has("3")) {
+            mcFailedGlobal = true;
+            criticalAlvins.add(s.alvinID); // 🔥 ขึ้นบัญชีดำไว้
+            recordIssue(s.alvinID, `[MC] Critical (Val > 190 in 4 Loops)`, 'MC');
+        }
+    }
+
+    if (mcFailedGlobal) {
+        reports.add(`🛑 <strong>[IssueMC]</strong> <span style="color:#e74c3c; font-weight:bold;">Should Replace Mackerel</span>`);
+    }
+
+    // ------------------------------------------
+    // 2. Check Alvin (Priority #2)
+    // ------------------------------------------
+    for (let key in stats) {
+        let s = stats[key];
+        
+        // 🔥 เช็คก่อน: ถ้า Alvin ตัวนี้โดนข้อหา MC ไปแล้ว -> ข้ามเลย!
+        if (criticalAlvins.has(s.alvinID)) continue;
+
+        let fails = [];
+        s.history.forEach(r => {
+            // เช็ค Limit ของบรรทัดนั้นๆ
+            let upper = r.upper;
+            let lower = r.lower;
+
+            let over = (r.val > upper && r.val <= upper + 10.0);
+            let under = (r.val < lower && r.val >= lower - 10.0);
+            
+            // เพิ่มเงื่อนไข: ต้องไม่ใช่เคส MC (กันพลาด)
+            let notMC = !(r.val > 190 && lower === 0 && upper === 1);
+
+            if ((over || under) && notMC) {
+                fails.push({l: r.loop, v: r.val});
+            }
+        });
+
+        if (fails.length > 0) {
+            fails.forEach(f => {
+                recordIssue(s.alvinID, `[Alvin] ${s.channel} Loop ${f.l} : ${f.v}`, 'Alvin');
+            });
+
+            if (!alvinFailCount[s.alvinID]) {
+                alvinFailCount[s.alvinID] = { sn: s.sn, count: 0 };
+            }
+            alvinFailCount[s.alvinID].count++;
+        }
+    }
+
+    // สร้างคำแนะนำสำหรับ Alvin (เฉพาะตัวที่ไม่ใช่ MC)
+    for (let id in alvinFailCount) {
+        let item = alvinFailCount[id];
+        reports.add(`🔧 <strong>[IssueAlvin]</strong> <strong>Replace Alvin${id}</strong> ➜ SN: ${item.sn}`);
+    }
+
+    // Render Map
+    for (let i = 1; i <= 96; i++) {
+        if (alvinMapData[i].status === 'error') {
+            let cell = document.getElementById(`cell-${i}`);
+            if (cell) cell.classList.add('error');
+        }
+    }
+
+    // Display
+    let list = document.getElementById("recommendationList");
+    let box = document.getElementById("recommendationBox");
+    list.innerHTML = "";
+    if (reports.size > 0) {
+        box.style.display = "block";
+        reports.forEach(msg => { let li = document.createElement("li"); li.innerHTML = msg; list.appendChild(li); });
+    } else { box.style.display = "none"; }
+}
+
+// --- Helper Functions ---
+// 🔥 แก้ไข: เก็บ Limit รายบรรทัด ไม่ใช่ราย Channel
+function prepareStats(data) {
+    let stats = {};
+    data.forEach(item => {
+        let k = `${item.SN}|${item.AlvinID}|${item.Channel}`;
+        if (!stats[k]) {
+            // ไม่เก็บ lower/upper ตรงนี้แล้ว เพราะมันเปลี่ยนไปมาได้
+            stats[k] = { sn: item.SN, alvinID: item.AlvinID, channel: item.Channel, history: [] };
+        }
+        // ยัด Limit ลงไปใน history แทน
+        stats[k].history.push({ 
+            loop: item.Loop, 
+            val: item.Value, 
+            lower: item.Lower, 
+            upper: item.Upper 
+        });
+    });
+    return stats;
+}
+
+function showTooltip(cell, id) {
+    if (activeCell) activeCell.classList.remove('active');
+    activeCell = cell; cell.classList.add('active');
+    let data = alvinMapData[id];
+    let content = "";
+    if (data && data.status === 'error') {
+        content = `<strong>❌ Unit ${id} : Issues Found</strong><br><ul style='margin-top:5px; padding-left:15px; margin-bottom:0;'>`;
+        let uniqueDetails = [...new Set(data.details.map(d => d.msg))];
+        uniqueDetails.slice(0, 7).forEach(msg => content += `<li>${msg}</li>`);
+        if(uniqueDetails.length > 7) content += `<li>...and ${uniqueDetails.length - 7} more...</li>`;
+        content += "</ul>";
+        tooltip.style.backgroundColor = "#c0392b";
+    } else {
+        content = `<strong>✅ Unit ${id} : Normal</strong><br><small>No issues detected</small>`;
+        tooltip.style.backgroundColor = "#2c3e50";
+    }
+    tooltip.innerHTML = content;
+    const rect = cell.getBoundingClientRect();
+    const top = rect.top + window.scrollY - tooltip.offsetHeight - 10;
+    const left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+    tooltip.style.top = `${top}px`; tooltip.style.left = `${left}px`; tooltip.classList.add('show');
+}
+function hideTooltip() { if (activeCell) activeCell.classList.remove('active'); tooltip.classList.remove('show'); }
+document.addEventListener('click', (e) => { if(!e.target.closest('.grid-cell')) hideTooltip(); });
+
+function createTable(data) {
+    let displayLimit = 1000;
+    let displayData = data.length > displayLimit ? data.slice(0, displayLimit) : data;
+    let html = '<table><thead><tr><th>SN</th><th>Loop</th><th>Channel</th><th>Upper</th><th>Lower</th><th>Value</th></tr></thead><tbody>';
+    for(let i=0; i<displayData.length; i++) {
+        let isNewSN = (i===0 || displayData[i].SN !== displayData[i-1].SN);
+        html += '<tr>';
+        if(isNewSN) {
+            let count = 1;
+            for(let j=i+1; j<displayData.length; j++) { if(displayData[j].SN === displayData[i].SN) count++; else break; }
+            html += `<td rowspan="${count}" class="sn-cell">${displayData[i].SN}</td>`;
+        }
+        html += `<td>${displayData[i].Loop}</td><td>${displayData[i].Label}</td><td>${displayData[i].Upper}</td><td>${displayData[i].Lower}</td>`;
+        let val = parseFloat(displayData[i].Value);
+        let cls = "val-normal"; let icon = "";
+        if(val > displayData[i].Upper) { cls = "val-high"; icon = " ⬆"; }
+        else if(val < displayData[i].Lower) { cls = "val-low"; icon = " ⬇"; }
+        html += `<td><span class="${cls}">${val}${icon}</span></td></tr>`;
+    }
+    if(data.length > displayLimit) html += `<tr><td colspan="6" style="text-align:center; color:gray;">... แสดงผลเพียง ${displayLimit} รายการแรก ...</td></tr>`;
+    html += '</tbody></table>';
+    document.getElementById("tableContainer").innerHTML = html;
+}
+function parseCSVLine(text) {
+    let ret = ['']; let i = 0, p = '', s = true;
+    for (let x = 0; x < text.length; x++) {
+        let l = text[x];
+        if ('"' === l) { s = !s; if ('"' === p) { ret[i] += '"'; l = '-'; } else if ('' === p) l = '-'; } else if (s && ',' === l) l = ret[++i] = ''; else ret[i] += l;
+        p = l;
+    }
+    return ret;
+}
+  </script>
+</body>
+</html>
