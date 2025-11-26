@@ -1,0 +1,38 @@
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="header-section">
+        <h1> HHBI Failure Checking</h1>
+        <small class="disclaimer">Currently supports analysis for 'AlvinXX_[XXX]_CHXX_readback' symptom.</small>
+    </div>
+
+    <div class="control-bar">
+        <input type="file" id="myFile" accept=".csv">
+        <button id="processBtn" class="btn-soft">
+            <i class="fa-solid fa-bolt"></i> Run Analysis
+        </button>
+    </div>
+
+    <div class="section-title">
+        <h3>
+        <div class="legend">
+            <span class="dot dot-normal"></span> Normal
+            <span class="dot dot-error"></span> Issue Found
+        </div>
+    </div>
+    
+    <div class="map-wrapper">
+        <div id="grid" class="grid-container"></div>
+        <div id="tooltip" class="love-tooltip"></div>
+    </div>
+
+    <div id="recommendationBox" class="rec-box">
+        <h3 class="rec-title"><i class="fa-solid fa-circle-exclamation"></i> System Recommendations</h3>
+        <ul id="recommendationList" class="rec-list"></ul>
+    </div>
+
+    <div id="tableContainer" class="table-card"></div>
+
+    
+</div>
