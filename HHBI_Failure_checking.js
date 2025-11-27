@@ -218,7 +218,7 @@ function showTooltip(cell, id) {
     let data = alvinMapData[id];
     let content = "";
     if (data && data.status === 'error') {
-        content = `<strong>❌ Unit ${id} : Issues Found</strong><br><ul style='margin-top:5px; padding-left:15px; margin-bottom:0;'>`;
+        content = `<strong>❌ Alvin ${id} : Issues Found</strong><br><ul style='margin-top:5px; padding-left:15px; margin-bottom:0;'>`;
         let uniqueDetails = [...new Set(data.details.map(d => d.msg))];
         uniqueDetails.slice(0, 7).forEach(msg => content += `<li>${msg}</li>`);
         if(uniqueDetails.length > 7) content += `<li>...and ${uniqueDetails.length - 7} more...</li>`;
@@ -270,3 +270,4 @@ function parseCSVLine(text) {
     return ret;
 
 }
+
