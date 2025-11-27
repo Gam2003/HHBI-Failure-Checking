@@ -70,7 +70,7 @@ input[type="file"] { padding: 8px 15px; background: #f8f9fa; border: 1px solid #
 /* 2. ช่องแถวกลาง (A-D) */
 .wide-cell { 
     grid-column: span 3; 
-    height: 35px; 
+    height: 80px; 
     font-weight: bold; 
     color: #1e88e5; 
 }
@@ -159,3 +159,4 @@ tr:hover td { background: #f1f8ff; }
 
 .footer { text-align: center; margin-top: 50px; color: #bdc3c7; font-size: 0.85rem; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
