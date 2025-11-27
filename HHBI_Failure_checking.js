@@ -16,9 +16,9 @@ for (let i = 1; i <= 96; i++) {
     gridContainer.appendChild(cell);
 }
 // ช่องพิเศษ
-["A","B","C","D"].forEach(l => createExtraCell('wide-cell', l));
-createExtraCell('footer-left', "E");
-createExtraCell('footer-right', "F");
+["Gato1","Gato2","Gato3","Gato4"].forEach(l => createExtraCell('wide-cell', l));
+createExtraCell('footer-left', "Narwhal");
+createExtraCell('footer-right', "Chopper");
 
 function createExtraCell(cls, txt) {
     let c = document.createElement('div'); c.className = cls; c.innerHTML = txt;
@@ -225,7 +225,7 @@ function showTooltip(cell, id) {
         content += "</ul>";
         tooltip.style.backgroundColor = "#c0392b";
     } else {
-        content = `<strong>✅ Unit ${id} : Normal</strong><br><small>No issues detected</small>`;
+        content = `<strong>✅ Alvin ${id} : Normal</strong><br><small>No issues detected</small>`;
         tooltip.style.backgroundColor = "#2c3e50";
     }
     tooltip.innerHTML = content;
@@ -268,4 +268,5 @@ function parseCSVLine(text) {
         p = l;
     }
     return ret;
+
 }
