@@ -1,108 +1,49 @@
-/* ============================================================
-   🎨 CSS: Soft Theme + Light Gray Header + White SN
-   ============================================================ */
+/* =========================================
+   🎨 CSS: Soft Theme + Vertical Text Fix
+   ========================================= */
 
-/* นำเข้าฟอนต์สวยๆ (Sarabun) */
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
-
-/* ตั้งค่าตัวแปรสี (แก้ไขตรงนี้จุดเดียว เปลี่ยนได้ทั้งเว็บ) */
 :root {
-    --page-bg: #f0f8ff;      /* พื้นหลังหน้าเว็บ (AliceBlue - ขาวอมฟ้า) */
-    --text-main: #2c3e50;    /* สีตัวหนังสือหลัก (กรมท่าเข้ม) */
-    --table-header: #e9ecef; /* 🔥 หัวตาราง: สีเทาอ่อน (Light Gray) */
-    --table-border: #dee2e6; /* สีเส้นขอบจางๆ */
-    --accent: #3498db;       /* สีปุ่ม (ฟ้าสดใส) */
-    --sn-bg: #ffffff;        /* 🔥 พื้นหลังช่อง SN: สีขาว (Pure White) */
+    --page-bg: #f0f8ff;      /* พื้นหลังฟ้าอ่อน */
+    --text-main: #2c3e50;    /* สีตัวหนังสือ */
+    --table-header: #e9ecef; /* สีหัวตารางเทาอ่อน */
+    --table-border: #dee2e6;
+    --accent: #3498db;       /* สีปุ่มฟ้าสดใส */
+    --sn-bg: #ffffff;        /* พื้นหลังช่อง SN สีขาว */
 }
 
-/* การตั้งค่าพื้นฐานของหน้าเว็บ */
 body {
     font-family: 'Sarabun', sans-serif;
     background-color: var(--page-bg);
     color: var(--text-main);
     padding: 40px 20px;
     line-height: 1.6;
+    margin: 0;
 }
 
-/* จัดกึ่งกลางคอนเทนเนอร์ */
-.container { 
-    max-width: 1100px; 
-    margin: 0 auto; 
-}
+.container { max-width: 1100px; margin: 0 auto; }
 
-/* --- ส่วนหัว (Header) --- */
-.header-section { 
-    text-align: center; 
-    margin-bottom: 30px; 
-}
-.header-section h1 { 
-    color: #34495e; 
-    font-weight: 700; 
-    margin-bottom: 5px; 
-    font-size: 2rem;
-}
-.header-section p {
-    color: #7f8c8d;
-    margin-top: 0;
-    font-size: 1.1rem;
-    font-weight: 300;
-}
-.disclaimer {
-    color: #95a5a6;
-    font-size: 0.85rem;
-    margin-top: 5px;
-    display: block;
-}
+/* Header */
+.header-section { text-align: center; margin-bottom: 30px; }
+.header-section h1 { color: #34495e; font-weight: 700; margin-bottom: 5px; font-size: 2rem; }
+.header-section p { color: #7f8c8d; margin-top: 0; font-size: 1.1rem; font-weight: 300; }
+.disclaimer { color: #95a5a6; font-size: 0.85rem; margin-top: 5px; display: block; }
 
-/* --- แถบควบคุม (Control Bar) --- */
+/* Controls */
 .control-bar {
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    gap: 15px; 
-    margin-bottom: 30px;
-    background: white; 
-    padding: 20px; 
-    border-radius: 50px; /* ทรงแคปซูลมนๆ */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    width: fit-content; 
-    margin-left: auto; 
-    margin-right: auto;
+    display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;
+    background: white; padding: 20px; border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); width: fit-content; margin: 0 auto 30px auto;
 }
-
-input[type="file"] {
-    padding: 8px 15px; 
-    background: #f8f9fa; 
-    border: 1px solid #ced4da; 
-    border-radius: 20px;
-    font-size: 0.9rem;
-    color: #555;
-}
-
+input[type="file"] { padding: 8px 15px; background: #f8f9fa; border: 1px solid #ced4da; border-radius: 20px; font-size: 0.9rem; color: #555; }
 .btn-soft {
-    background-color: var(--accent); 
-    color: white;
-    border: none; 
-    padding: 10px 30px; 
-    border-radius: 25px;
-    font-family: 'Sarabun'; 
-    font-weight: 600; 
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    background-color: var(--accent); color: white; border: none; padding: 10px 30px;
+    border-radius: 25px; font-family: 'Sarabun'; font-weight: 600; font-size: 1rem;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
 }
+.btn-soft:hover { transform: translateY(-2px); background-color: #2980b9; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
 
-.btn-soft:hover { 
-    transform: translateY(-2px); 
-    background-color: #2980b9;
-    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); 
-}
-
-/* --- Map Grid Styles --- */
+/* Map Grid Styles */
 .section-title { text-align: center; margin-bottom: 15px; }
 .legend { display: flex; justify-content: center; gap: 15px; margin-top: 5px; font-size: 0.9rem; color: #7f8c8d; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
@@ -126,29 +67,29 @@ input[type="file"] {
 /* 1. ช่องปกติ 96 ช่อง */
 .grid-cell { height: 35px; }
 
-/* 2. 🔥 ช่องแถวกลาง (A-D) แก้ความสูงเป็น 35px */
+/* 2. ช่องแถวกลาง (A-D) */
 .wide-cell { 
     grid-column: span 3; 
-    height: 80px; /* ✅ แก้ไขแล้ว */
+    height: 35px; 
     font-weight: bold; 
     color: #1e88e5; 
 }
 
-/* 3. 🔥 ช่องล่างซ้าย (E/N) แนวตั้ง */
+/* 3. 🔥 ช่องล่างซ้าย (แนวตั้ง อ่านล่างขึ้นบน) */
 .footer-left { 
     grid-column: span 1; 
     height: 80px; 
     font-weight: bold; 
     color: #1565c0;
-    /* ✅ เพิ่มส่วนแนวตั้ง */
-    writing-mode: vertical-rl; /* เรียงแนวตั้ง */
-    text-orientation: mixed;   /* (สำคัญ) สั่งให้ตัวอักษรหมุนตามบรรทัด */ 
-    transform: rotate(180deg);
-}
+    font-size: 0.9rem;
     
-    /* เลือกทิศทางการนอน (เลือกใช้บรรทัดใดบรรทัดหนึ่ง) */
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg); /* หมุนกลับหัว */
+    letter-spacing: 1px;
+}
 
-/* 4. ช่องล่างขวา (F) แนวนอนปกติ */
+/* 4. ช่องล่างขวา */
 .footer-right { 
     grid-column: span 11; 
     height: 80px; 
@@ -157,9 +98,22 @@ input[type="file"] {
     font-size: 1.2rem; 
 }
 
-/* Interactive Effects */
-.grid-cell:hover, .wide-cell:hover, .footer-left:hover, .footer-right:hover { 
-    transform: scale(1.1); z-index: 5; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+/* Interactive Effects (แยก .footer-left ออก) */
+.grid-cell:hover, .wide-cell:hover, .footer-right:hover { 
+    transform: scale(1.1); 
+    z-index: 5; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    background-color: #2196f3;
+    color: white;
+}
+
+/* 🔥 Hover สำหรับช่องแนวตั้ง (ต้องหมุน 180 ไว้เหมือนเดิม) */
+.footer-left:hover {
+    transform: rotate(180deg) scale(1.1); 
+    z-index: 5;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: #2196f3;
+    color: white;
 }
 
 /* Error State */
@@ -203,16 +157,5 @@ tr:hover td { background: #f1f8ff; }
 .val-low { color: #2980b9; font-weight: 700; background: #eaf2f8; padding: 4px 10px; border-radius: 6px; }
 .val-normal { color: #95a5a6; }
 
-/* Footer */
-.footer {
-    text-align: center;
-    margin-top: 50px;
-    color: #bdc3c7;
-    font-size: 0.85rem;
-}
-
-/* Animation เล็กน้อย */
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+.footer { text-align: center; margin-top: 50px; color: #bdc3c7; font-size: 0.85rem; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
