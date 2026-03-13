@@ -52,7 +52,7 @@ input[type="file"] { padding: 8px 15px; background: #f8f9fa; border: 1px solid #
 
 .map-wrapper { display: flex; justify-content: center; margin-bottom: 40px; }
 .grid-container {
-    display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px;
+    display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px;
     background: white; padding: 15px; border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 550px; position: relative;
 }
@@ -69,15 +69,15 @@ input[type="file"] { padding: 8px 15px; background: #f8f9fa; border: 1px solid #
 
 /* 2. ช่องแถวกลาง (A-D) */
 .wide-cell { 
-    grid-column: span 3; 
-    height: 80px; 
+    grid-column: span 6; 
+    height: 35px; 
     font-weight: bold; 
     color: #1e88e5; 
 }
 
 /* 3. 🔥 ช่องล่างซ้าย (แนวตั้ง อ่านล่างขึ้นบน) */
 .footer-left { 
-    grid-column: span 1; 
+    grid-column: span 2; 
     height: 80px; 
     font-weight: bold; 
     color: #1565c0;
@@ -91,7 +91,7 @@ input[type="file"] { padding: 8px 15px; background: #f8f9fa; border: 1px solid #
 
 /* 4. ช่องล่างขวา */
 .footer-right { 
-    grid-column: span 11; 
+    grid-column: span 22; 
     height: 80px; 
     font-weight: bold; 
     color: #1565c0; 
@@ -159,4 +159,3 @@ tr:hover td { background: #f1f8ff; }
 
 .footer { text-align: center; margin-top: 50px; color: #bdc3c7; font-size: 0.85rem; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
